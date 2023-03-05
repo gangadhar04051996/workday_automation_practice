@@ -1,25 +1,42 @@
 *** Settings ***
 Library     Selenium2Library
+Library     OperatingSystem
 
 *** Test Cases ***
 Google Devops And Find Eficode
+    Load JSON Data
+    Sleep    2
     Open Browser To Google
     # Search For Devops
-    # Result Should Contain Eficode
+*** Variables ***
 
+@{mailid}  gangadhar.pydev@gmail.com
+${data}    Load Json Data
 *** Keywords ***
+Load JSON Data
+    ${json}=  Get file  data.json
+    ${object}=   Evaluate    json.loads('''${json}''')  json
+    Set Global Variable   ${data}   ${object}
+
+    log  Hello, my name is ${object["email"]} and address is ${object["address"]} | WARN
+    [return]  ${data}
+    
 Open Browser To Google
-    Open Browser    https://michaels.wd5.myworkdayjobs.com/External/login?redirect=%2FExternal%2Fjob%2FIrving-Irving-Corporate-Office-3939-West-John-Carpenter-Freeway%2FAssociate-Category-Manager_R00207772%2Fapply%3Fsource%3DLinkedin    browser=edge
+    ${res}=  Load JSON Data
+    Open Browser  ${res["url"]}     browser=edge
     Maximize Browser Window
+    Sleep    2
     Google Should Be Open
     Enter value in Workday
     Click submit button
 
 Enter value in Workday
+    ${res}=  Load JSON Data
     Wait Until Element Is Visible        xpath: //*[@id="input-4"]
-    Input Text                       xpath: //*[@id="input-4"]    Admin
+    Input Text                       xpath: //*[@id="input-4"]    ${res["email"]}
     Wait Until Element Is Visible        id=input-5
-    Input Password                   id=input-5    admin123 
+    Input Password                   id=input-5    ${res["address"]}
+    # Sleep    15
     
 
 Click submit button

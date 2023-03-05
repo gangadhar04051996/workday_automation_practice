@@ -1,2 +1,4 @@
 robotselenium/*.png
 media/*/*.png
+data.json
+log.*
