@@ -3,7 +3,7 @@ Library     Selenium2Library
 Library     OperatingSystem
 
 *** Test Cases ***
-Google Devops And Find Eficode
+Open Edge and run the query
     Load JSON Data
     Sleep    2
     Open Browser To Google
@@ -14,7 +14,7 @@ Google Devops And Find Eficode
 ${data}    Load Json Data
 *** Keywords ***
 Load JSON Data
-    ${json}=  Get file  data.json
+    ${json}=  Get file  C:/Users/tilak/Desktop/GitProjects/workday/robotselenium/data.json
     ${object}=   Evaluate    json.loads('''${json}''')  json
     Set Global Variable   ${data}   ${object}
 
@@ -27,18 +27,24 @@ Open Browser To Google
     Maximize Browser Window
     Sleep    2
     Google Should Be Open
-    Enter value in Workday
-    Click submit button
-
-Enter value in Workday
-    ${res}=  Load JSON Data
-    Wait Until Element Is Visible        xpath: //*[@id="input-4"]
-    Input Text                       xpath: //*[@id="input-4"]    ${res["email"]}
-    Wait Until Element Is Visible        id=input-5
-    Input Password                   id=input-5    ${res["address"]}
-    # Sleep    15
+    Enter login in Workday
     
 
+Enter login in Workday
+    ${res}=  Load JSON Data
+    Click login button at top
+    Wait Until Element Is Visible        xpath: //*[@data-automation-id="email"]
+    Input Text                       xpath: //*[@data-automation-id="email"]    ${res["email"]}
+    Wait Until Element Is Visible        xpath: //*[@data-automation-id="password"]
+    Input Password                   xpath: //*[@data-automation-id="password"]    ${res["password"]}
+    Sleep    2
+    Click submit button
+    sleep   10
+    
+Click login button at top
+    sleep   2
+    Wait Until Element Is Visible    xpath://*[@data-automation-id="utilityButtonSignIn"]
+    Click Element At Coordinates    xpath://*[@data-automation-id="utilityButtonSignIn"]    ${0}    ${0}
 Click submit button
     Wait Until Element Is Visible  xpath://div[@data-automation-id="click_filter"]
     # Click Button  xpath://button[@data-automation-id="signInSubmitButton"]
